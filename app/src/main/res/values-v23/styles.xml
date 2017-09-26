@@ -10,9 +10,10 @@
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
         <item name="android:colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="android:colorButtonNormal">@color/secondaryColor</item>
-        <item name="android:colorAccent">@color/secondaryColor</item>
+        <item name="android:colorAccent">@color/colorBackground</item>
         <item name="android:colorBackground">@color/primaryLightColor</item>
         <item name="android:statusBarColor">@color/primaryDarkColor</item>
+
 
     </style>
 

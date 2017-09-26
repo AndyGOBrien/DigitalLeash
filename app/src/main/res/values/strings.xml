@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DigitalLeash</string>
+    <string name="cardview_text">Card View Text</string>
+    <string name="intro_1">Hello! Welcome to Digital Leash!</string>
 </resources>
