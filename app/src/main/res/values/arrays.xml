@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="IntroMessages">
+        <item>@string/intro_1</item>
+        <item>@string/intro_2</item>
+        <item>@string/intro_3</item>
+    </string-array>
+</resources>

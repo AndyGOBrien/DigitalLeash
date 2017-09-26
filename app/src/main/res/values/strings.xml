@@ -2,4 +2,9 @@
     <string name="app_name">DigitalLeash</string>
     <string name="cardview_text">Card View Text</string>
     <string name="intro_1">Hello! Welcome to Digital Leash!</string>
+    <string name="intro_2">This is an app that will help you keep tabs on your child so that you can rest in peace knowing they are in your proximity</string>
+    <string name="intro_3">Is this your first time using this app?</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

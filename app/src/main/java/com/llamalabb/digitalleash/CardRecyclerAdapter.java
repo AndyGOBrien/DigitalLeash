@@ -2,8 +2,11 @@ package com.llamalabb.digitalleash;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by andy on 9/26/17.
@@ -11,15 +14,19 @@ import android.view.ViewGroup;
 
 public class CardRecyclerAdapter extends Adapter {
 
+    private String msg;
     private int direction;
 
-    CardRecyclerAdapter(int direction){
+
+    CardRecyclerAdapter(int direction, String msg){
+        this.msg = msg;
         this.direction = direction;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new IntroViewHolder(new IntroCard(parent.getContext(), direction));
+
+        return new IntroViewHolder(new IntroCard(parent.getContext(), direction, msg));
     }
 
     @Override
@@ -35,4 +42,5 @@ public class CardRecyclerAdapter extends Adapter {
             super(itemView);
         }
     }
+
 }

@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context="com.llamalabb.digitalleash.MainActivity">
 
+    <fragment
+        android:id="@+id/fragment_bottom"
+        android:name="android.support.v4.app.DialogFragment"
+        android:layout_width="395dp"
+        android:layout_height="180dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+        tools:layout="@layout/fragment_yes_no_dialog" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="395dp"
@@ -16,6 +30,7 @@
         android:layout_marginTop="8dp"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
