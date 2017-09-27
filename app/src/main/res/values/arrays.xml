@@ -4,5 +4,6 @@
         <item>@string/intro_1</item>
         <item>@string/intro_2</item>
         <item>@string/intro_3</item>
+        <item>@string/intro_4</item>
     </string-array>
 </resources>

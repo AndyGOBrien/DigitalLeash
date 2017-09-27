@@ -2,11 +2,9 @@ package com.llamalabb.digitalleash;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import static java.security.AccessController.getContext;
 
 /**
  * Created by andy on 9/26/17.
