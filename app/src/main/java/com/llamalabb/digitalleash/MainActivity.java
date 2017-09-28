@@ -5,11 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import android.support.v4.view.ViewPager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,94 +17,40 @@ import layout.YesNoDialogFragment;
 
 public class MainActivity extends FragmentActivity {
 
-    private final int LEFT = ItemTouchHelper.LEFT;
-    private final int RIGHT = ItemTouchHelper.RIGHT;
     private List<String> mMessages = new ArrayList<>();
     private Fragment yesNoDialog, childParentDialog;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private CardRecyclerAdapter cardRecyclerAdapter;
+    private boolean showYesNoFrag = false;
+    private boolean showChildParentFrag = false;
+    private CardPagerAdapter cardPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+
+        cardPagerAdapter = new CardPagerAdapter();
 
         Collections.addAll(mMessages, getResources().getStringArray(R.array.IntroMessages));
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        LinearSnapHelper snapHelper = new LinearSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView);
+        createCardItemsForPagerAdapter();
 
-        recyclerView.setLayoutManager(linearLayoutManager);
+        viewPager.setAdapter(cardPagerAdapter);
+        setPageChangeListener(viewPager);
 
-        recyclerView.setAdapter(new CardRecyclerAdapter(ItemTouchHelper.RIGHT, mMessages));
 
-//        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback
-//                (0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
-//
-//            int index = 0;
-//            Boolean showYesNoFrag = false;
-//            Boolean showChildParentFrag = false;
-//
-//
-//            @Override
-//            public boolean onMove(RecyclerView recyclerView,
-//                                  RecyclerView.ViewHolder viewHolder,
-//                                  RecyclerView.ViewHolder target) {
-//
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-//
-//
-//                if(direction == LEFT && index < mMessages.size()-1)
-//                    recyclerView.setAdapter(new CardRecyclerAdapter(RIGHT, mMessages.get(++index)));
-//                else if(direction == RIGHT && index > 0)
-//                    recyclerView.setAdapter(new CardRecyclerAdapter(LEFT, mMessages.get(--index)));
-//                else if(direction == RIGHT && index == 0)
-//                    recyclerView.setAdapter(new CardRecyclerAdapter(RIGHT, mMessages.get(index)));
-//                else if(direction == LEFT && index == mMessages.size()-1)
-//                    recyclerView.setAdapter(new CardRecyclerAdapter(LEFT, mMessages.get(index)));
-//
-//
-//                if(index == 2 && showYesNoFrag == false) {
-//                    showYesNoFrag = true;
-//                    if(showChildParentFrag == true){
-//                        fragmentManager.popBackStack();
-//                        showChildParentFrag = false;
-//                    }
-//                    goToYesNoFragment();
-//                }
-//                else if(index != 2 && showYesNoFrag == true){
-//                    fragmentManager.popBackStack();
-//                    showYesNoFrag = false;
-//                }
-//
-//                if(index == 3 && showChildParentFrag == false) {
-//                    showChildParentFrag = true;
-//                    goToChildParentFragment();
-//                }
-//                else if(index != 3 && showChildParentFrag == true){
-//                    fragmentManager.popBackStack();
-//                    showChildParentFrag = false;
-//                }
-//
-//
-//            }
-//        };
-//
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-//
-//        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    public void goToYesNoFragment(){
+    private void createCardItemsForPagerAdapter(){
+        for(int i = 0; i < mMessages.size(); i++) {
+            cardPagerAdapter.addCardItem(new CardItem(mMessages.get(i)));
+        }
+    }
+
+    private void goToYesNoFragment(){
         yesNoDialog = new YesNoDialogFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -121,7 +63,7 @@ public class MainActivity extends FragmentActivity {
         fragmentTransaction.commit();
     }
 
-    public void goToChildParentFragment(){
+    private void goToChildParentFragment(){
         childParentDialog = new ChildParentDialogFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -133,4 +75,53 @@ public class MainActivity extends FragmentActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+
+
+    private void setPageChangeListener(ViewPager viewPager){
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                setFragmentOnPagePosition(position);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    private void setFragmentOnPagePosition(int position){
+        if(position == 2 && showYesNoFrag == false) {
+            showYesNoFrag = true;
+            if(showChildParentFrag == true){
+                fragmentManager.popBackStack();
+                showChildParentFrag = false;
+            }
+            goToYesNoFragment();
+        }
+        else if(position != 2 && showYesNoFrag == true){
+            fragmentManager.popBackStack();
+            showYesNoFrag = false;
+        }
+
+        if(position == 3 && showChildParentFrag == false) {
+            showChildParentFrag = true;
+            goToChildParentFragment();
+        }
+        else if(position != 3 && showChildParentFrag == true){
+            fragmentManager.popBackStack();
+            showChildParentFrag = false;
+        }
+    }
+
 }
