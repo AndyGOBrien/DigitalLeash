@@ -6,7 +6,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 import java.util.ArrayList;
@@ -34,12 +36,13 @@ public class MainActivity extends FragmentActivity {
 
 
         Collections.addAll(mMessages, getResources().getStringArray(R.array.IntroMessages));
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        LinearSnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
 
-
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         recyclerView.setAdapter(new CardRecyclerAdapter(ItemTouchHelper.RIGHT, mMessages));
