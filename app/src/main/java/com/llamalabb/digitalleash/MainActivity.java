@@ -1,29 +1,36 @@
 package com.llamalabb.digitalleash;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import layout.ChildParentDialogFragment;
+import layout.SignUpFragment;
 import layout.YesNoDialogFragment;
 
 
 public class MainActivity extends FragmentActivity {
 
     private List<String> mMessages = new ArrayList<>();
-    private Fragment yesNoDialog, childParentDialog;
+    private Fragment yesNoDialog, childParentDialog, signUpFragment;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private boolean showYesNoFrag = false;
     private boolean showChildParentFrag = false;
+    private boolean showSignUp = false;
     private CardPagerAdapter cardPagerAdapter;
+    private SharedPreferences mSettings = getSharedPreferences("MySettingsFile", MODE_PRIVATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +65,7 @@ public class MainActivity extends FragmentActivity {
                                                 R.anim.slide_down_bot,
                                                 R.anim.slide_up_bot,
                                                 R.anim.slide_down_bot);
-        fragmentTransaction.replace(R.id.fragment_holder_bot, yesNoDialog);
+        fragmentTransaction.replace(R.id.fragment_holder, yesNoDialog);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -67,11 +74,24 @@ public class MainActivity extends FragmentActivity {
         childParentDialog = new ChildParentDialogFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_down_top,
-                R.anim.slide_up_top,
-                R.anim.slide_down_top,
-                R.anim.slide_up_top);
-        fragmentTransaction.replace(R.id.fragment_holder_top, childParentDialog);
+        fragmentTransaction.setCustomAnimations(R.anim.slide_up_bot,
+                R.anim.slide_down_bot,
+                R.anim.slide_up_bot,
+                R.anim.slide_down_bot);
+        fragmentTransaction.replace(R.id.fragment_holder, childParentDialog);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void goToSignUpFragment(){
+        signUpFragment = new SignUpFragment();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_up_bot,
+                R.anim.slide_down_bot,
+                R.anim.slide_up_bot,
+                R.anim.slide_down_bot);
+        fragmentTransaction.replace(R.id.fragment_holder, signUpFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -114,13 +134,28 @@ public class MainActivity extends FragmentActivity {
             showYesNoFrag = false;
         }
 
+
         if(position == 3 && showChildParentFrag == false) {
             showChildParentFrag = true;
+            if(showSignUp == true) {
+                fragmentManager.popBackStack();
+                showSignUp = false;
+            }
             goToChildParentFragment();
         }
         else if(position != 3 && showChildParentFrag == true){
             fragmentManager.popBackStack();
             showChildParentFrag = false;
+        }
+
+
+        if(position == 4 && showSignUp == false){
+            goToSignUpFragment();
+            showSignUp = true;
+        }
+        else if(position != 4 && showSignUp == true){
+            fragmentManager.popBackStack();
+            showSignUp = false;
         }
     }
 

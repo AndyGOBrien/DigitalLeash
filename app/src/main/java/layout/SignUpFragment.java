@@ -1,4 +1,4 @@
-package com.llamalabb.digitalleash;
+package layout;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SignUp extends Fragment {
+import com.llamalabb.digitalleash.R;
+
+public class SignUpFragment extends Fragment {
 
 
-    public SignUp() {
+    public SignUpFragment() {
         // Required empty public constructor
     }
 
