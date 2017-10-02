@@ -49,9 +49,11 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View view = LayoutInflater.from(container.getContext())
                 .inflate(R.layout.intro_card, container, false);
-        container.addView(view);
-        bind(mData.get(position), view);
         CardView cardView = (CardView) view.findViewById(R.id.cardView);
+
+        container.addView(view);
+
+        bind(mData.get(position), view);
 
         if (mBaseElevation == 0) {
             mBaseElevation = cardView.getCardElevation();
