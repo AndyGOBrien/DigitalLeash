@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,14 +15,12 @@ import layout.ChildParentDialogFragment;
 import layout.ChildSignUpFragment;
 import layout.ParentSignUpFragment;
 import layout.YesNoDialogFragment;
-import com.llamalabb.digitalleash.CardValues;
 
-import org.w3c.dom.Text;
-
+import static android.os.Build.VERSION_CODES.M;
 import static com.llamalabb.digitalleash.CardValues.CHILD_PARENT_CARD;
 import static com.llamalabb.digitalleash.CardValues.SIGN_UP_CARD;
 import static com.llamalabb.digitalleash.CardValues.YES_NO_CARD;
-import static com.llamalabb.digitalleash.R.id.textView;
+
 
 
 public class MainActivity extends FragmentActivity {
@@ -37,6 +34,7 @@ public class MainActivity extends FragmentActivity {
     private CardPagerAdapter mCardPagerAdapter;
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
+    private MyLocationManager mMyLocationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +54,9 @@ public class MainActivity extends FragmentActivity {
 
         viewPager.setAdapter(mCardPagerAdapter);
         setPageChangeListener(viewPager);
+
+        mMyLocationManager = MyLocationManager.getInstance(this);
+
 
     }
 
@@ -154,5 +155,4 @@ public class MainActivity extends FragmentActivity {
             showSignUp = false;
         }
     }
-
 }

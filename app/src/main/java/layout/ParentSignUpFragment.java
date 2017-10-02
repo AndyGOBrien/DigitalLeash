@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.llamalabb.digitalleash.CardPagerAdapter;
 import com.llamalabb.digitalleash.CardValues;
+import com.llamalabb.digitalleash.MyLocationManager;
 import com.llamalabb.digitalleash.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -27,6 +28,7 @@ public class ParentSignUpFragment extends Fragment {
     private int mIsPreviousUser;
     private CardPagerAdapter mCardPagerAdapter;
     private CardView mCardView;
+    private MyLocationManager mMyLocationManager;
 
 
     public ParentSignUpFragment() {
@@ -43,6 +45,7 @@ public class ParentSignUpFragment extends Fragment {
         mSettings = getContext().getSharedPreferences("MySettingsFile", MODE_PRIVATE);
         mEditor = mSettings.edit();
         mIsPreviousUser = mSettings.getInt("isPreviousUser", -1);
+        mMyLocationManager = MyLocationManager.getInstance(getContext());
 
     }
 
@@ -56,6 +59,9 @@ public class ParentSignUpFragment extends Fragment {
         mRadius = (EditText) mView.findViewById(R.id.radius_editText);
         mLongitude = (EditText) mView.findViewById(R.id.longitude_editText);
         mLatitude = (EditText) mView.findViewById(R.id.latitude_editText);
+
+        mLongitude.setText("" + mMyLocationManager.getLongitude());
+        mLatitude.setText("" + mMyLocationManager.getLatitude());
 
         if(mIsPreviousUser == 1)
             mSetInfoButton.setText("Set Info");
@@ -76,6 +82,16 @@ public class ParentSignUpFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    private void setListeners(){
+        mSetInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
 
