@@ -15,10 +15,18 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     private List<CardView> mViews;
     private List<CardItem> mData;
     private float mBaseElevation;
+    private static CardPagerAdapter instance;
 
-    public CardPagerAdapter() {
+    private CardPagerAdapter() {
         mData = new ArrayList<>();
         mViews = new ArrayList<>();
+    }
+
+    public static CardPagerAdapter getInstance(){
+        if(instance == null){
+            instance = new CardPagerAdapter();
+        }
+        return instance;
     }
 
     public void addCardItem(CardItem item) {

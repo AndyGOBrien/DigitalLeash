@@ -5,7 +5,7 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="30dp"
     android:orientation="vertical"
-    tools:context="com.llamalabb.digitalleash.layout.SignUpFragment">
+    tools:context="layout.ParentSignUpFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -17,7 +17,7 @@
         android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/username_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -35,12 +35,12 @@
         android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/radius_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="numberDecimal"
         android:text="Radius"
         android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
@@ -53,12 +53,12 @@
         android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/longitude_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="numberSigned|numberDecimal"
         android:text="Longitude"
         android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
@@ -71,12 +71,20 @@
         android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/latitude_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="numberSigned|numberDecimal"
         android:text="Latitude"
         android:textAppearance="@android:style/TextAppearance.Material.Small" />
+
+    <Button
+        android:id="@+id/set_info_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="Button" />
 </LinearLayout>

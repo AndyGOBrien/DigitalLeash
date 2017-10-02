@@ -7,35 +7,48 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import layout.ChildParentDialogFragment;
-import layout.SignUpFragment;
+import layout.ChildSignUpFragment;
+import layout.ParentSignUpFragment;
 import layout.YesNoDialogFragment;
+import com.llamalabb.digitalleash.CardValues;
+
+import org.w3c.dom.Text;
+
+import static com.llamalabb.digitalleash.CardValues.CHILD_PARENT_CARD;
+import static com.llamalabb.digitalleash.CardValues.SIGN_UP_CARD;
+import static com.llamalabb.digitalleash.CardValues.YES_NO_CARD;
+import static com.llamalabb.digitalleash.R.id.textView;
 
 
 public class MainActivity extends FragmentActivity {
 
     private List<String> mMessages = new ArrayList<>();
-    private Fragment mYesNoDialog, mChildParentDialog, mSignUpFragment;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private boolean mShowYesNoFrag = false;
     private boolean mShowChildParentFrag = false;
-    private boolean mShowSignUp = false;
+    private boolean showSignUp = false;
     private CardPagerAdapter mCardPagerAdapter;
-    private SharedPreferences mSettings = getSharedPreferences("MySettingsFile", MODE_PRIVATE);
-    private SharedPreferences.Editor editor = mSettings.edit();
+    private SharedPreferences mSettings;
+    private SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mSettings = getSharedPreferences("MySettingsFile", MODE_PRIVATE);
+        mEditor = mSettings.edit();
+
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 
-        mCardPagerAdapter = new CardPagerAdapter();
+        mCardPagerAdapter = CardPagerAdapter.getInstance();
 
         Collections.addAll(mMessages, getResources().getStringArray(R.array.IntroMessages));
 
@@ -43,7 +56,6 @@ public class MainActivity extends FragmentActivity {
 
         viewPager.setAdapter(mCardPagerAdapter);
         setPageChangeListener(viewPager);
-
 
     }
 
@@ -53,45 +65,25 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private void goToYesNoFragment(){
-        mYesNoDialog = new YesNoDialogFragment();
-        mFragmentManager = getSupportFragmentManager();
-        mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.setCustomAnimations(R.anim.slide_up_bot,
-                                                R.anim.slide_down_bot,
-                                                R.anim.slide_up_bot,
-                                                R.anim.slide_down_bot);
-        mFragmentTransaction.replace(R.id.fragment_holder, mYesNoDialog);
-        mFragmentTransaction.addToBackStack(null);
-        mFragmentTransaction.commit();
-    }
 
-    private void goToChildParentFragment(){
-        mChildParentDialog = new ChildParentDialogFragment();
-        mFragmentManager = getSupportFragmentManager();
-        mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.setCustomAnimations(R.anim.slide_up_bot,
-                R.anim.slide_down_bot,
-                R.anim.slide_up_bot,
-                R.anim.slide_down_bot);
-        mFragmentTransaction.replace(R.id.fragment_holder, mChildParentDialog);
-        mFragmentTransaction.addToBackStack(null);
-        mFragmentTransaction.commit();
-    }
+    private void setFragmentInHolder(Class<?> fragClass){
 
-    private void goToSignUpFragment(){
-        mSignUpFragment = new SignUpFragment();
-        mFragmentManager = getSupportFragmentManager();
-        mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.setCustomAnimations(R.anim.slide_up_bot,
-                R.anim.slide_down_bot,
-                R.anim.slide_up_bot,
-                R.anim.slide_down_bot);
-        mFragmentTransaction.replace(R.id.fragment_holder, mSignUpFragment);
-        mFragmentTransaction.addToBackStack(null);
-        mFragmentTransaction.commit();
-    }
+        try{
+            Object frag = fragClass.newInstance();
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.setCustomAnimations(R.anim.slide_up_bot,
+                    R.anim.slide_down_bot,
+                    R.anim.slide_up_bot,
+                    R.anim.slide_down_bot);
+            mFragmentTransaction.replace(R.id.fragment_holder, (Fragment)frag);
+            mFragmentTransaction.addToBackStack(null);
+            mFragmentTransaction.commit();
+        }
+        catch (Exception ex){
 
+        }
+    }
 
 
     private void setPageChangeListener(ViewPager viewPager){
@@ -105,7 +97,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onPageSelected(int position) {
 
-                setFragmentOnPagePosition(position);
+                setFragmentOnPagerPosition(position);
 
             }
 
@@ -116,42 +108,50 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
-    private void setFragmentOnPagePosition(int position){
-        if(position == 2 && mShowYesNoFrag == false) {
+    private void setFragmentOnPagerPosition(int position){
+        if(position == YES_NO_CARD && mShowYesNoFrag == false) {
             mShowYesNoFrag = true;
             if(mShowChildParentFrag == true){
                 mFragmentManager.popBackStack();
                 mShowChildParentFrag = false;
             }
-            goToYesNoFragment();
+            setFragmentInHolder(YesNoDialogFragment.class);
         }
-        else if(position != 2 && mShowYesNoFrag == true){
+        else if(position != YES_NO_CARD && mShowYesNoFrag == true){
             mFragmentManager.popBackStack();
             mShowYesNoFrag = false;
         }
 
 
-        if(position == 3 && mShowChildParentFrag == false) {
+        if(position == CHILD_PARENT_CARD && mShowChildParentFrag == false) {
             mShowChildParentFrag = true;
-            if(mShowSignUp == true) {
+            if(showSignUp == true) {
                 mFragmentManager.popBackStack();
-                mShowSignUp = false;
+                showSignUp = false;
             }
-            goToChildParentFragment();
+            setFragmentInHolder(ChildParentDialogFragment.class);
         }
-        else if(position != 3 && mShowChildParentFrag == true){
+        else if(position != CHILD_PARENT_CARD && mShowChildParentFrag == true){
             mFragmentManager.popBackStack();
             mShowChildParentFrag = false;
         }
 
 
-        if(position == 4 && mShowSignUp == false){
-            goToSignUpFragment();
-            mShowSignUp = true;
+        if(position == SIGN_UP_CARD && showSignUp == false){
+            TextView textView = (TextView) mCardPagerAdapter.getCardViewAt(SIGN_UP_CARD).findViewById(R.id.intro_text);
+            showSignUp = true;
+            if(mSettings.getInt("isParent", -1) == 1) {
+                textView.setText(getResources().getString(R.string.parent_sign_up));
+                setFragmentInHolder(ParentSignUpFragment.class);
+            }
+            else if(mSettings.getInt("isParent", -1) == 0) {
+                textView.setText(getResources().getString(R.string.child_sign_up));
+                setFragmentInHolder(ChildSignUpFragment.class);
+            }
         }
-        else if(position != 4 && mShowSignUp == true){
+        else if(position != SIGN_UP_CARD && showSignUp == true){
             mFragmentManager.popBackStack();
-            mShowSignUp = false;
+            showSignUp = false;
         }
     }
 
