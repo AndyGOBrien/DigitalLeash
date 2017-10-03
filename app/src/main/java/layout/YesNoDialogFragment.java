@@ -70,7 +70,7 @@ public class YesNoDialogFragment extends Fragment {
 
                 textView = (TextView) mCardView.findViewById(R.id.intro_text);
 
-                textView.setText("You have been set as a previous user. \n\nPlease continue...");
+                textView.setText("You have been set as a new user. \n\nPlease continue...");
             }
         });
 
@@ -87,7 +87,7 @@ public class YesNoDialogFragment extends Fragment {
 
                 textView = (TextView) mCardView.findViewById(R.id.intro_text);
 
-                textView.setText("You have been set as a new user. \n\nPlease continue...");
+                textView.setText("You have been set as a previous user. \n\nPlease continue...");
             }
 
         });

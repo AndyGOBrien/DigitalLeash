@@ -5,7 +5,7 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="30dp"
     android:orientation="vertical"
-    tools:context="layout.ParentSignUpFragment">
+    tools:context="layout.ParentSignInFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -25,7 +25,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -43,32 +43,12 @@
         android:ems="10"
         android:inputType="textPassword"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
-        android:textSize="10sp" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:text="Confirm Password"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textSize="16sp" />
-
-    <EditText
-        android:id="@+id/confirm_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:textAppearance="@android:style/TextAppearance.Material.Small"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
         android:text="Radius"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textSize="16sp" />
@@ -81,14 +61,14 @@
         android:ems="10"
         android:inputType="numberDecimal"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/set_info_button"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Create" />
+        android:text="Sign In" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -136,4 +116,5 @@
             android:gravity="center"
             android:text="0.0" />
     </LinearLayout>
+
 </LinearLayout>

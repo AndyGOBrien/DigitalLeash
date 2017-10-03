@@ -2,7 +2,8 @@
     <string name="app_name">DigitalLeash</string>
     <string name="cardview_text">Card View Text</string>
 
-    <string name="parent_sign_up">Enter your information</string>
+    <string name="parent_sign_up">Please sign up for the Digital Leash Service</string>
+    <string name="parent_sign_in">Please sign in to the Digital Leash Service</string>
     <string name="child_sign_up">Enter the parent\'s username</string>
 
     <string name="intro_1">Hello! Welcome to Digital Leash!</string>

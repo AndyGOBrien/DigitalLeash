@@ -8,21 +8,26 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import layout.ChildParentDialogFragment;
 import layout.ChildSignUpFragment;
+import layout.ParentSignInFragment;
 import layout.ParentSignUpFragment;
 import layout.YesNoDialogFragment;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 
-import static android.os.Build.VERSION_CODES.M;
+
 import static com.llamalabb.digitalleash.CardValues.CHILD_PARENT_CARD;
 import static com.llamalabb.digitalleash.CardValues.SIGN_UP_CARD;
 import static com.llamalabb.digitalleash.CardValues.YES_NO_CARD;
 
 
-
+@RuntimePermissions
 public class MainActivity extends FragmentActivity {
 
     private List<String> mMessages = new ArrayList<>();
@@ -55,7 +60,8 @@ public class MainActivity extends FragmentActivity {
         viewPager.setAdapter(mCardPagerAdapter);
         setPageChangeListener(viewPager);
 
-        mMyLocationManager = MyLocationManager.getInstance(this);
+        MainActivityPermissionsDispatcher.createLocationManagerWithPermissionCheck(this);
+        createLocationManager();
 
 
     }
@@ -142,8 +148,14 @@ public class MainActivity extends FragmentActivity {
             TextView textView = (TextView) mCardPagerAdapter.getCardViewAt(SIGN_UP_CARD).findViewById(R.id.intro_text);
             showSignUp = true;
             if(mSettings.getInt("isParent", -1) == 1) {
-                textView.setText(getResources().getString(R.string.parent_sign_up));
-                setFragmentInHolder(ParentSignUpFragment.class);
+                if(mSettings.getInt("isPreviousUser", -1) == 0) {
+                    textView.setText(getResources().getString(R.string.parent_sign_up));
+                    setFragmentInHolder(ParentSignUpFragment.class);
+                }
+                else if(mSettings.getInt("isPreviousUser", -1) == 1){
+                    textView.setText(getResources().getString(R.string.parent_sign_in));
+                    setFragmentInHolder(ParentSignInFragment.class);
+                }
             }
             else if(mSettings.getInt("isParent", -1) == 0) {
                 textView.setText(getResources().getString(R.string.child_sign_up));
@@ -154,5 +166,17 @@ public class MainActivity extends FragmentActivity {
             mFragmentManager.popBackStack();
             showSignUp = false;
         }
+    }
+
+    @NeedsPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
+    public void createLocationManager(){
+        mMyLocationManager = MyLocationManager.getInstance(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // NOTE: delegate the permission handling to generated method
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 }

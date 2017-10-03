@@ -11,23 +11,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.llamalabb.digitalleash.CardPagerAdapter;
 import com.llamalabb.digitalleash.CardValues;
 import com.llamalabb.digitalleash.MyLocationManager;
 import com.llamalabb.digitalleash.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import static android.content.Context.MODE_PRIVATE;
 
-public class ParentSignUpFragment extends Fragment {
+public class ParentSignInFragment extends Fragment {
 
     private View mView;
     private Button mSetInfoButton;
-    private EditText mUserName, mRadius, mPassword, mConfirmPW;
+    private EditText mUserName, mRadius, mPassword;
     private TextView mLongitude, mLatitude;
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
@@ -36,10 +32,10 @@ public class ParentSignUpFragment extends Fragment {
     private MyLocationManager mMyLocationManager;
 
 
-
-    public ParentSignUpFragment() {
+    public ParentSignInFragment() {
         // Required empty public constructor
     }
+
 
 
     @Override
@@ -58,12 +54,11 @@ public class ParentSignUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mView = inflater.inflate(R.layout.fragment_parent_sign_up, container, false);
+        mView = inflater.inflate(R.layout.fragment_parent_sign_in, container, false);
         mSetInfoButton = (Button) mView.findViewById(R.id.set_info_button);
         mUserName = (EditText) mView.findViewById(R.id.username_editText);
         mRadius = (EditText) mView.findViewById(R.id.radius_editText);
         mPassword = (EditText) mView.findViewById(R.id.password_editText);
-        mConfirmPW = (EditText) mView.findViewById(R.id.confirm_editText);
         mLongitude = (TextView) mView.findViewById(R.id.longitude_text);
         mLatitude = (TextView) mView.findViewById(R.id.latitude_text);
 
@@ -73,10 +68,10 @@ public class ParentSignUpFragment extends Fragment {
         return mView;
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
@@ -89,39 +84,8 @@ public class ParentSignUpFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(mPassword.getText().toString().equals(mConfirmPW.getText().toString())
-                        && mUserName.getText().toString().length() >= 3
-                        && mPassword.getText().toString().length() >= 6
-                        && !mRadius.getText().toString().isEmpty()) {
-                    try {
-                        JSONObject jsonObject= new JSONObject();
-                        jsonObject.put("username", mUserName.getText().toString());
-                        jsonObject.put("password", mPassword.getText().toString());
-                        jsonObject.put("latitude", mLatitude.getText().toString());
-                        jsonObject.put("longitude", mLongitude.getText().toString());
-                        jsonObject.put("radius", mRadius.getText().toString());
-                        mEditor.putString("username", mUserName.getText().toString());
-                        mEditor.putString("radius", mRadius.getText().toString());
-
-                        jsonObject.toString();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                else if(mUserName.getText().toString().length() < 3)
-                    Toast.makeText(getContext(), "The User Name must be at least 3 characters", Toast.LENGTH_SHORT).show();
-                else if(mPassword.getText().toString().length() < 6)
-                    Toast.makeText(getContext(), "The password must be at least 6 characters", Toast.LENGTH_SHORT).show();
-                else if(!mPassword.getText().toString().equals(mConfirmPW.getText().toString()))
-                    Toast.makeText(getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-
             }
         });
 
     }
-
-
 }
