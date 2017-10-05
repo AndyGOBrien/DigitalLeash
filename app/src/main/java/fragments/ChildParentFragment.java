@@ -1,4 +1,4 @@
-package layout;
+package fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import com.llamalabb.digitalleash.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ChildParentDialogFragment extends Fragment {
+public class ChildParentFragment extends Fragment {
 
     private Button mChildButton, mParentButton;
     private View mView;
@@ -24,7 +24,7 @@ public class ChildParentDialogFragment extends Fragment {
     private CardPagerAdapter mCardPagerAdapter;
     private CardView mCardView;
 
-    public ChildParentDialogFragment() {
+    public ChildParentFragment() {
         // Required empty public constructor
     }
 
@@ -44,7 +44,7 @@ public class ChildParentDialogFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        mView = inflater.inflate(R.layout.fragment_child_parent_dialog, container, false);
+        mView = inflater.inflate(R.layout.fragment_child_parent, container, false);
         mChildButton = (Button) mView.findViewById(R.id.child_button);
         mParentButton = (Button) mView.findViewById(R.id.parent_button);
         setListeners();

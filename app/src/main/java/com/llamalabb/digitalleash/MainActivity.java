@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import layout.ChildParentDialogFragment;
-import layout.ChildSignUpFragment;
-import layout.ParentSignInFragment;
-import layout.ParentSignUpFragment;
-import layout.YesNoDialogFragment;
+import fragments.ChildParentFragment;
+import fragments.ChildSignUpFragment;
+import fragments.ParentSignInFragment;
+import fragments.ParentSignUpFragment;
+import fragments.YesNoFragment;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 mFragmentManager.popBackStack();
                 mShowChildParentFrag = false;
             }
-            setFragmentInHolder(new YesNoDialogFragment());
+            setFragmentInHolder(new YesNoFragment());
         }
         else if(position != YES_NO_CARD && mShowYesNoFrag == true){
             mFragmentManager.popBackStack();
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 mFragmentManager.popBackStack();
                 showSignUp = false;
             }
-            setFragmentInHolder(new ChildParentDialogFragment());
+            setFragmentInHolder(new ChildParentFragment());
         }
         else if(position != CHILD_PARENT_CARD && mShowChildParentFrag == true){
             mFragmentManager.popBackStack();

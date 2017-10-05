@@ -1,4 +1,4 @@
-package layout;
+package fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import com.llamalabb.digitalleash.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class YesNoDialogFragment extends Fragment {
+public class YesNoFragment extends Fragment {
 
     private Button mYesButton, mNoButton;
     private View mView;
@@ -26,7 +26,7 @@ public class YesNoDialogFragment extends Fragment {
     private CardView mCardView;
 
 
-    public YesNoDialogFragment() {
+    public YesNoFragment() {
         // Required empty public constructor
     }
 
@@ -43,7 +43,7 @@ public class YesNoDialogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mView = inflater.inflate(R.layout.fragment_yes_no_dialog, container, false);
+        mView = inflater.inflate(R.layout.fragment_yes_no, container, false);
         mYesButton = (Button) mView.findViewById(R.id.yes_button);
         mNoButton = (Button) mView.findViewById(R.id.no_button);
         setListeners();

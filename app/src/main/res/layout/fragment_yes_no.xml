@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="50dp"
-    tools:context="layout.YesNoDialogFragment">
+    tools:context="fragments.YesNoFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

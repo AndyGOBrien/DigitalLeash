@@ -1,4 +1,4 @@
-package layout;
+package fragments.dialogs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -20,8 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.llamalabb.digitalleash.CardPagerAdapter;
-import com.llamalabb.digitalleash.CardValues;
 import com.llamalabb.digitalleash.MyLocationManager;
 import com.llamalabb.digitalleash.R;
 

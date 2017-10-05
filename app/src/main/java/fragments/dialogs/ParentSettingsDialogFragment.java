@@ -1,15 +1,10 @@
-package layout;
+package fragments.dialogs;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,8 +15,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.llamalabb.digitalleash.R;
-
-import java.util.zip.Inflater;
 
 
 public class ParentSettingsDialogFragment extends DialogFragment {

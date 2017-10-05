@@ -5,7 +5,7 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="30dp"
     android:orientation="vertical"
-    tools:context="layout.ParentSignUpFragment">
+    tools:context="fragments.ParentSignUpFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
