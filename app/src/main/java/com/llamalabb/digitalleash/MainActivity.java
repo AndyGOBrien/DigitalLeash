@@ -1,5 +1,7 @@
 package com.llamalabb.digitalleash;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,13 +26,14 @@ import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.llamalabb.digitalleash.CardValues.CHILD_PARENT_CARD;
 import static com.llamalabb.digitalleash.CardValues.SIGN_UP_CARD;
 import static com.llamalabb.digitalleash.CardValues.YES_NO_CARD;
 
 
 @RuntimePermissions
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
     private List<String> mMessages = new ArrayList<>();
     private FragmentManager mFragmentManager;
@@ -44,10 +49,15 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         mSettings = getSharedPreferences("MySettingsFile", MODE_PRIVATE);
         mEditor = mSettings.edit();
+        if(mSettings.getInt("isParent", -1) == 1 && mSettings.getInt("introComplete", 0) == 1){
+            Intent intent = new Intent(this, ParentActivity.class);
+            startActivity(intent);
+        }
+        setContentView(R.layout.activity_main);
+
+
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 

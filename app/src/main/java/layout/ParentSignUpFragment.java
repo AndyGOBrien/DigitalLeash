@@ -2,9 +2,11 @@ package layout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,11 @@ import com.llamalabb.digitalleash.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -33,7 +40,9 @@ public class ParentSignUpFragment extends Fragment {
     private SharedPreferences.Editor mEditor;
     private CardPagerAdapter mCardPagerAdapter;
     private CardView mCardView;
+    private TextView mTextView;
     private MyLocationManager mMyLocationManager;
+
 
 
 
@@ -51,6 +60,8 @@ public class ParentSignUpFragment extends Fragment {
         mSettings = getContext().getSharedPreferences("MySettingsFile", MODE_PRIVATE);
         mEditor = mSettings.edit();
         mMyLocationManager = MyLocationManager.getInstance(getContext());
+        mCardView = mCardPagerAdapter.getCardViewAt(CardValues.SIGN_UP_CARD);
+        mTextView = (TextView) mCardView.findViewById(R.id.intro_text);
 
     }
 
@@ -69,6 +80,8 @@ public class ParentSignUpFragment extends Fragment {
 
         mLongitude.setText("" + mMyLocationManager.getLongitude());
         mLatitude.setText("" + mMyLocationManager.getLatitude());
+
+        setListeners();
 
         return mView;
     }
@@ -93,20 +106,28 @@ public class ParentSignUpFragment extends Fragment {
                         && mUserName.getText().toString().length() >= 3
                         && mPassword.getText().toString().length() >= 6
                         && !mRadius.getText().toString().isEmpty()) {
+
+                    String UrlStr = "https://turntotech.firebaseio.com/digitalleash/"+mUserName.getText().toString()+".json";
+                    JSONObject jsonObject= new JSONObject();
                     try {
-                        JSONObject jsonObject= new JSONObject();
-                        jsonObject.put("username", mUserName.getText().toString());
+                        jsonObject.put("username", mUserName.getText().toString().toLowerCase());
                         jsonObject.put("password", mPassword.getText().toString());
                         jsonObject.put("latitude", mLatitude.getText().toString());
                         jsonObject.put("longitude", mLongitude.getText().toString());
                         jsonObject.put("radius", mRadius.getText().toString());
+                        jsonObject.put("child_latitude", "0.0");
+                        jsonObject.put("child_longitude", "0.0");
                         mEditor.putString("username", mUserName.getText().toString());
                         mEditor.putString("radius", mRadius.getText().toString());
+                        mEditor.commit();
 
-                        jsonObject.toString();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }finally {
+                        String json = jsonObject.toString();
+                        new SendData().execute(new String[]{UrlStr,json});
                     }
+
                 }
 
                 else if(mUserName.getText().toString().length() < 3)
@@ -123,5 +144,69 @@ public class ParentSignUpFragment extends Fragment {
 
     }
 
+    private void hideViews(){
+        mUserName.setVisibility(View.GONE);
+        mPassword.setVisibility(View.GONE);
+        mConfirmPW.setVisibility(View.GONE);
+        mRadius.setVisibility(View.GONE);
+        mSetInfoButton.setVisibility(View.GONE);
+
+        mView.findViewById(R.id.textView).setVisibility(View.GONE);
+        mView.findViewById(R.id.textView2).setVisibility(View.GONE);
+        mView.findViewById(R.id.textView3).setVisibility(View.GONE);
+        mView.findViewById(R.id.textView4).setVisibility(View.GONE);
+    }
+
+
+    public class SendData extends AsyncTask<String, String, String>{
+
+        HttpURLConnection httpCon;
+        String conStatus;
+
+        @Override
+        protected String doInBackground(String... params){
+            try {
+                URL url = new URL(params[0]);
+                httpCon = (HttpURLConnection) url.openConnection();
+
+                httpCon.setRequestMethod("PUT");
+                httpCon.setDoOutput(true);
+
+                httpCon.setRequestProperty("Content-Type", "application/json");
+                httpCon.setRequestProperty("Accept", "application/json");
+
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(httpCon.getOutputStream());
+                outputStreamWriter.write(params[1]);
+                outputStreamWriter.flush();
+                outputStreamWriter.close();
+
+
+                conStatus = String.valueOf(httpCon.getResponseCode());
+                Log.e("ConnectionStatus", String.valueOf(httpCon.getResponseCode()));
+                Log.e("ConnectionStatus", String.valueOf(httpCon.getResponseMessage()));
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }finally {
+                httpCon.disconnect();
+            }
+            return conStatus;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+
+            if(Integer.parseInt(conStatus) >= 200 && Integer.parseInt(conStatus) < 300){
+                hideViews();
+                mTextView.setText("Your account has been created...\n\n Please Continue...");
+                mEditor.putInt("introComplete", 1);
+                mEditor.commit();
+            }
+            else{
+                Toast.makeText(getContext(), "ERROR: " + conStatus, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
 
 }

@@ -9,112 +9,121 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/textView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="User Name"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textSize="16sp" />
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/username_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textAppearance="@android:style/TextAppearance.Material.Small"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Password"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textSize="16sp" />
-
-    <EditText
-        android:id="@+id/password_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:textAppearance="@android:style/TextAppearance.Material.Small"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Radius"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textSize="16sp" />
-
-    <EditText
-        android:id="@+id/radius_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:textAppearance="@android:style/TextAppearance.Material.Small"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/set_info_button"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Sign In" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="70dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Current Latitude" />
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1
-"
-            android:gravity="center"
-            android:text="Current Longitude" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User Name"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                android:textSize="16sp" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/username_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/latitude_text"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="0.0" />
+            <EditText
+                android:id="@+id/password_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
-        <TextView
-            android:id="@+id/longitude_text"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="0.0" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Radius"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/radius_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:textAppearance="@android:style/TextAppearance.Material.Small" />
+
+            <Button
+                android:id="@+id/set_info_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Sign In" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/latitude_text"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="0.0" />
+
+                <TextView
+                    android:id="@+id/longitude_text"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="0.0" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Current Latitude" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1
+        "
+                    android:gravity="center"
+                    android:text="Current Longitude" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

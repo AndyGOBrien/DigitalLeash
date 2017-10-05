@@ -2,21 +2,16 @@
 <resources>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-
-        <item name="android:colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
         <item name="android:colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="android:colorButtonNormal">@color/secondaryColor</item>
-        <item name="android:colorAccent">@color/secondaryColor</item>
+        <item name="colorButtonNormal">@color/secondaryColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:statusBarColor">@color/primaryDarkColor</item>
-
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-
 
     </style>
 
