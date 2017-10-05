@@ -1,16 +1,13 @@
 package com.llamalabb.digitalleash;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,7 +23,6 @@ import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
 
-import static android.content.Context.MODE_PRIVATE;
 import static com.llamalabb.digitalleash.CardValues.CHILD_PARENT_CARD;
 import static com.llamalabb.digitalleash.CardValues.SIGN_UP_CARD;
 import static com.llamalabb.digitalleash.CardValues.YES_NO_CARD;
@@ -83,17 +79,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setFragmentInHolder(Class<?> fragClass){
+    private void setFragmentInHolder(Fragment fragClass){
 
         try{
-            Object frag = fragClass.newInstance();
             mFragmentManager = getSupportFragmentManager();
             mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.setCustomAnimations(R.anim.slide_up_bot,
                     R.anim.slide_down_bot,
                     R.anim.slide_up_bot,
                     R.anim.slide_down_bot);
-            mFragmentTransaction.replace(R.id.fragment_holder, (Fragment)frag);
+            mFragmentTransaction.replace(R.id.fragment_holder, fragClass);
             mFragmentTransaction.addToBackStack(null);
             mFragmentTransaction.commit();
         }
@@ -132,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 mFragmentManager.popBackStack();
                 mShowChildParentFrag = false;
             }
-            setFragmentInHolder(YesNoDialogFragment.class);
+            setFragmentInHolder(new YesNoDialogFragment());
         }
         else if(position != YES_NO_CARD && mShowYesNoFrag == true){
             mFragmentManager.popBackStack();
@@ -146,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 mFragmentManager.popBackStack();
                 showSignUp = false;
             }
-            setFragmentInHolder(ChildParentDialogFragment.class);
+            setFragmentInHolder(new ChildParentDialogFragment());
         }
         else if(position != CHILD_PARENT_CARD && mShowChildParentFrag == true){
             mFragmentManager.popBackStack();
@@ -160,16 +155,16 @@ public class MainActivity extends AppCompatActivity {
             if(mSettings.getInt("isParent", -1) == 1) {
                 if(mSettings.getInt("isPreviousUser", -1) == 0) {
                     textView.setText(getResources().getString(R.string.parent_sign_up));
-                    setFragmentInHolder(ParentSignUpFragment.class);
+                    setFragmentInHolder(new ParentSignUpFragment());
                 }
                 else if(mSettings.getInt("isPreviousUser", -1) == 1){
                     textView.setText(getResources().getString(R.string.parent_sign_in));
-                    setFragmentInHolder(ParentSignInFragment.class);
+                    setFragmentInHolder(new ParentSignInFragment());
                 }
             }
             else if(mSettings.getInt("isParent", -1) == 0) {
                 textView.setText(getResources().getString(R.string.child_sign_up));
-                setFragmentInHolder(ChildSignUpFragment.class);
+                setFragmentInHolder(new ChildSignUpFragment());
             }
         }
         else if(position != SIGN_UP_CARD && showSignUp == true){

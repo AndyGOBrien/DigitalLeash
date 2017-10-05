@@ -2,15 +2,19 @@ package layout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,7 +38,11 @@ import java.net.URL;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ParentSignInFragment extends Fragment {
+/**
+ * Created by andy on 10/5/17.
+ */
+
+public class ParentSignInDialogFragment extends DialogFragment {
 
     private View mView;
     private Button mSetInfoButton;
@@ -42,34 +50,29 @@ public class ParentSignInFragment extends Fragment {
     private TextView mLongitude, mLatitude;
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
-    private CardPagerAdapter mCardPagerAdapter;
-    private CardView mCardView;
     private MyLocationManager mMyLocationManager;
     private String mJsonString;
-    private TextView mTextView;
-    
-    public ParentSignInFragment() {
+
+    public ParentSignInDialogFragment() {
         // Required empty public constructor
     }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mCardPagerAdapter = CardPagerAdapter.getInstance();
-        mCardView = mCardPagerAdapter.getCardViewAt(CardValues.SIGN_UP_CARD);
-        mSettings = getContext().getSharedPreferences("MySettingsFile", MODE_PRIVATE);
-        mEditor = mSettings.edit();
-        mMyLocationManager = MyLocationManager.getInstance(getContext());
-        mCardView = mCardPagerAdapter.getCardViewAt(CardValues.SIGN_UP_CARD);
-        mTextView = (TextView) mCardView.findViewById(R.id.intro_text);
-
+    // TODO: Rename and change types and number of parameters
+    public static ParentSignInDialogFragment newInstance(String title) {
+        ParentSignInDialogFragment fragment = new ParentSignInDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("title", title);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mSettings = getContext().getSharedPreferences("MySettingsFile", MODE_PRIVATE);
+        mEditor = mSettings.edit();
+        mMyLocationManager = MyLocationManager.getInstance(getContext());
 
         mView = inflater.inflate(R.layout.fragment_parent_sign_in, container, false);
         mSetInfoButton = (Button) mView.findViewById(R.id.set_info_button);
@@ -85,6 +88,21 @@ public class ParentSignInFragment extends Fragment {
         setListeners();
 
         return mView;
+    }
+
+    @Override
+    public void onResume() {
+        // Store access variables for window and blank point
+        Window window = getDialog().getWindow();
+        Point size = new Point();
+        // Store dimensions of the screen in `size`
+        Display display = window.getWindowManager().getDefaultDisplay();
+        display.getSize(size);
+        // Set the width of the dialog proportional to 75% of the screen width
+        window.setLayout((int) (size.x * 0.75), WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        // Call super onResume after sizing
+        super.onResume();
     }
 
 
@@ -189,18 +207,15 @@ public class ParentSignInFragment extends Fragment {
 
                 if(identityConfirmed(JsonUserName, info.getString("password"))){
                     setUserInformation(JsonUserName, JsonRadius);
-                    hideViews();
-                    mTextView.setText("Your account has been verified\n\nPlease Continue...");
-                    mEditor.putInt("introComplete", 1);
-                    mEditor.commit();
+                    dismiss();
                 }
 
             }catch(Exception e){e.printStackTrace();}
         }
     }
-    
+
     private boolean identityConfirmed(String username, String password){
-        
+
         if(password.equals(mPassword.getText().toString()) &&
                 username.toLowerCase().equals(
                         mUserName.getText().toString().toLowerCase())){
@@ -216,14 +231,4 @@ public class ParentSignInFragment extends Fragment {
         mEditor.commit();
     }
 
-    private void hideViews(){
-        mUserName.setVisibility(View.GONE);
-        mPassword.setVisibility(View.GONE);
-        mRadius.setVisibility(View.GONE);
-        mSetInfoButton.setVisibility(View.GONE);
-
-        mView.findViewById(R.id.textView).setVisibility(View.GONE);
-        mView.findViewById(R.id.textView2).setVisibility(View.GONE);
-        mView.findViewById(R.id.textView3).setVisibility(View.GONE);
-    }
 }
