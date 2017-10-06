@@ -8,7 +8,7 @@
     <string name="is_previous_user">isPreviousUser</string>
     <string name="username">username</string>
     <string name="radius">radius</string>
-    <key name="specify_location">specifyLocation</key>
+    <string name="specify_location">specifyLocation</string>
 
 
 

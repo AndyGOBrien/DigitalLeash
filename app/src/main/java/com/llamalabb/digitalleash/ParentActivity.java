@@ -3,25 +3,30 @@ package com.llamalabb.digitalleash;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import fragments.dialogs.ParentSettingsDialogFragment.ParentSettingsDialogListener;
 
 import fragments.dialogs.ParentSettingsDialogFragment;
 import fragments.dialogs.ParentSignInDialogFragment;
 
-public class ParentActivity extends AppCompatActivity {
+public class ParentActivity extends AppCompatActivity implements ParentSettingsDialogListener {
 
-    MyLocationManager myLocationManager;
-    TextView statusText;
+    private MyLocationManager mMyLocationManager;
+    private TextView mStatusText;
+    private boolean mOpenParentSignInFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("ParentActivity", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent);
 
-        myLocationManager = MyLocationManager.getInstance(this);
-        statusText = (TextView) findViewById(R.id.status_text);
+        mMyLocationManager = MyLocationManager.getInstance(this);
+        mStatusText = (TextView) findViewById(R.id.status_text);
     }
 
     @Override
@@ -47,4 +52,17 @@ public class ParentActivity extends AppCompatActivity {
         ParentSettingsDialogFragment settingsDialog = ParentSettingsDialogFragment.newInstance("Settings");
         settingsDialog.show(fm, "fragment_alert");
     }
+
+    private void showParentSignInDialog(){
+        FragmentManager fm = getSupportFragmentManager();
+        ParentSignInDialogFragment settingsDialog = ParentSignInDialogFragment.newInstance("Settings");
+        settingsDialog.show(fm, "fragment_alert");
+    }
+
+    @Override
+    public void onParentChangeButtonClicked(boolean bool) {
+        mOpenParentSignInFragment = bool;
+        showParentSignInDialog();
+    }
+
 }

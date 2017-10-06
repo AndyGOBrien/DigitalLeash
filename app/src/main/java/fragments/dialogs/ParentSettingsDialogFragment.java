@@ -1,9 +1,8 @@
 package fragments.dialogs;
 
+import android.content.Context;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.Display;
 import android.view.Gravity;
@@ -17,22 +16,27 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 
+
 import com.llamalabb.digitalleash.R;
 
 
-public class ParentSettingsDialogFragment extends DialogFragment {
+public class ParentSettingsDialogFragment extends DialogFragment{
 
 
 
-    private OnFragmentInteractionListener mListener;
     private View mView;
     private Button mChangeParentButton;
     private Switch mSpecifyLocationSwitch;
     private EditText mLatitudeEditText;
     private EditText mLongitudeEditText;
+    private ParentSettingsDialogListener mActionListener;
 
     public ParentSettingsDialogFragment() {
         // Required empty public constructor
+    }
+
+    public interface ParentSettingsDialogListener{
+        void onParentChangeButtonClicked(boolean bool);
     }
 
     // TODO: Rename and change types and number of parameters
@@ -60,9 +64,12 @@ public class ParentSettingsDialogFragment extends DialogFragment {
         return mView;
     }
 
+
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-        super.onViewCreated(view, savedInstanceState);
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        mActionListener = (ParentSettingsDialogListener) context;
 
     }
 
@@ -81,15 +88,13 @@ public class ParentSettingsDialogFragment extends DialogFragment {
         super.onResume();
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
     private void setListeners(){
+
         mChangeParentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mActionListener.onParentChangeButtonClicked(true);
+                dismiss();
             }
         });
 
@@ -107,4 +112,5 @@ public class ParentSettingsDialogFragment extends DialogFragment {
             }
         });
     }
+
 }
