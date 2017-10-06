@@ -147,7 +147,7 @@ public class ChildSignUpFragment extends Fragment {
             if(Integer.parseInt(conStatus) >= 200 && Integer.parseInt(conStatus) < 300){
                 hideViews();
                 mTextView.setText("The parent has been set\n\n Please Continue...");
-                mEditor.putInt("introComplete", 1);
+                mEditor.putInt(getString(R.string.intro_complete), 1);
                 mEditor.commit();
             }
             else{

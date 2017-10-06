@@ -63,7 +63,7 @@ public class ChildParentFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                mEditor.putInt("isParent", 0);
+                mEditor.putInt(getString(R.string.is_parent), 0);
                 mEditor.commit();
 
                 textView = (TextView) mCardView.findViewById(R.id.intro_text);
@@ -78,7 +78,7 @@ public class ChildParentFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                mEditor.putInt("isParent", 1);
+                mEditor.putInt(getString(R.string.is_parent), 1);
                 mEditor.commit();
 
                 textView = (TextView) mCardView.findViewById(R.id.intro_text);

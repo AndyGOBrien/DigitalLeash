@@ -191,7 +191,7 @@ public class ParentSignInFragment extends Fragment {
                     setUserInformation(JsonUserName, JsonRadius);
                     hideViews();
                     mTextView.setText("Your account has been verified\n\nPlease Continue...");
-                    mEditor.putInt("introComplete", 1);
+                    mEditor.putInt(getString(R.string.intro_complete), 1);
                     mEditor.commit();
                 }
 
@@ -211,8 +211,8 @@ public class ParentSignInFragment extends Fragment {
     }
 
     private void setUserInformation(String username, String radius){
-        mEditor.putString("username", username);
-        mEditor.putString("radius", radius);
+        mEditor.putString(getString(R.string.username), username);
+        mEditor.putString(getString(R.string.radius), radius);
         mEditor.commit();
     }
 

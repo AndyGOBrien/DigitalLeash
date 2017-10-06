@@ -63,7 +63,7 @@ public class YesNoFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                mEditor.putInt("isPreviousUser", 0);
+                mEditor.putInt(getString(R.string.is_previous_user), 0);
                 mEditor.commit();
 
                 setButtonsInvisible();
@@ -80,7 +80,7 @@ public class YesNoFragment extends Fragment {
 
             @Override
             public void onClick(View v){
-                mEditor.putInt("isPreviousUser", 1);
+                mEditor.putInt(getString(R.string.is_previous_user), 1);
                 mEditor.commit();
 
                 setButtonsInvisible();

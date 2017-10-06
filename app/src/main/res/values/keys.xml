@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+
+    <string name="is_parent">isParent</string>
+    <string name="intro_complete">introComplete</string>
+    <string name="is_previous_user">isPreviousUser</string>
+    <string name="username">username</string>
+    <string name="radius">radius</string>
+    <key name="specify_location">specifyLocation</key>
+
+
+
+</resources>

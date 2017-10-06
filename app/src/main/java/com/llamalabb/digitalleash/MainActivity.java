@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mSettings = getSharedPreferences("MySettingsFile", MODE_PRIVATE);
         mEditor = mSettings.edit();
-        if(mSettings.getInt("isParent", -1) == 1 && mSettings.getInt("introComplete", 0) == 1){
+        if(mSettings.getInt(getString(R.string.is_parent), -1) == 1 && mSettings.getInt(getString(R.string.intro_complete), 0) == 1){
             Intent intent = new Intent(this, ParentActivity.class);
             startActivity(intent);
         }
@@ -152,17 +152,17 @@ public class MainActivity extends AppCompatActivity {
         if(position == SIGN_UP_CARD && showSignUp == false){
             TextView textView = (TextView) mCardPagerAdapter.getCardViewAt(SIGN_UP_CARD).findViewById(R.id.intro_text);
             showSignUp = true;
-            if(mSettings.getInt("isParent", -1) == 1) {
-                if(mSettings.getInt("isPreviousUser", -1) == 0) {
+            if(mSettings.getInt(getString(R.string.is_parent), -1) == 1) {
+                if(mSettings.getInt(getString(R.string.is_previous_user), -1) == 0) {
                     textView.setText(getResources().getString(R.string.parent_sign_up));
                     setFragmentInHolder(new ParentSignUpFragment());
                 }
-                else if(mSettings.getInt("isPreviousUser", -1) == 1){
+                else if(mSettings.getInt(getString(R.string.is_previous_user), -1) == 1){
                     textView.setText(getResources().getString(R.string.parent_sign_in));
                     setFragmentInHolder(new ParentSignInFragment());
                 }
             }
-            else if(mSettings.getInt("isParent", -1) == 0) {
+            else if(mSettings.getInt(getString(R.string.is_parent), -1) == 0) {
                 textView.setText(getResources().getString(R.string.child_sign_up));
                 setFragmentInHolder(new ChildSignUpFragment());
             }

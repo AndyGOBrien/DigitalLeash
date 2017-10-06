@@ -223,8 +223,8 @@ public class ParentSignInDialogFragment extends DialogFragment {
     }
 
     private void setUserInformation(String username, String radius){
-        mEditor.putString("username", username);
-        mEditor.putString("radius", radius);
+        mEditor.putString(getString(R.string.username), username);
+        mEditor.putString(getString(R.string.radius), radius);
         mEditor.commit();
     }
 

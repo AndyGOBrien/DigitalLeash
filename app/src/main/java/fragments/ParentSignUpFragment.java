@@ -117,8 +117,8 @@ public class ParentSignUpFragment extends Fragment {
                         jsonObject.put("radius", mRadius.getText().toString());
                         jsonObject.put("child_latitude", "0.0");
                         jsonObject.put("child_longitude", "0.0");
-                        mEditor.putString("username", mUserName.getText().toString());
-                        mEditor.putString("radius", mRadius.getText().toString());
+                        mEditor.putString(getString(R.string.username), mUserName.getText().toString());
+                        mEditor.putString(getString(R.string.radius), mRadius.getText().toString());
                         mEditor.commit();
 
                     } catch (JSONException e) {

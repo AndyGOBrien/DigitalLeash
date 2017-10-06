@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import fragments.dialogs.ParentSettingsDialogFragment;
 import fragments.dialogs.ParentSignInDialogFragment;
 
 public class ParentActivity extends AppCompatActivity {
@@ -43,7 +44,7 @@ public class ParentActivity extends AppCompatActivity {
 
     private void showSettingsDialog(){
         FragmentManager fm = getSupportFragmentManager();
-        ParentSignInDialogFragment settingsDialog = ParentSignInDialogFragment.newInstance("Settings");
+        ParentSettingsDialogFragment settingsDialog = ParentSettingsDialogFragment.newInstance("Settings");
         settingsDialog.show(fm, "fragment_alert");
     }
 }

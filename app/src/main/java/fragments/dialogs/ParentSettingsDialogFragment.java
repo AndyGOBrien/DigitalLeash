@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.Switch;
 
 import com.llamalabb.digitalleash.R;
 
@@ -24,8 +27,9 @@ public class ParentSettingsDialogFragment extends DialogFragment {
     private OnFragmentInteractionListener mListener;
     private View mView;
     private Button mChangeParentButton;
-    private ViewGroup mContainer;
-    private LayoutInflater mInflater;
+    private Switch mSpecifyLocationSwitch;
+    private EditText mLatitudeEditText;
+    private EditText mLongitudeEditText;
 
     public ParentSettingsDialogFragment() {
         // Required empty public constructor
@@ -47,6 +51,9 @@ public class ParentSettingsDialogFragment extends DialogFragment {
 
         mView = inflater.inflate(R.layout.fragment_parent_settings_dialog, container, false);
         mChangeParentButton = (Button) mView.findViewById(R.id.switch_parent);
+        mSpecifyLocationSwitch = (Switch) mView.findViewById(R.id.specify_location_switch);
+        mLatitudeEditText = (EditText) mView.findViewById(R.id.latitude_editText);
+        mLongitudeEditText = (EditText) mView.findViewById(R.id.longitude_editText);
 
         setListeners();
 
@@ -83,6 +90,20 @@ public class ParentSettingsDialogFragment extends DialogFragment {
         mChangeParentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            }
+        });
+
+        mSpecifyLocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mLatitudeEditText.setVisibility(View.VISIBLE);
+                    mLongitudeEditText.setVisibility(View.VISIBLE);
+                }
+                else{
+                    mLatitudeEditText.setVisibility(View.INVISIBLE);
+                    mLongitudeEditText.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
