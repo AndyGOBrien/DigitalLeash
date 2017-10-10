@@ -1,6 +1,7 @@
 package fragments.dialogs;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -19,24 +20,29 @@ import android.widget.Switch;
 
 import com.llamalabb.digitalleash.R;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class ParentSettingsDialogFragment extends DialogFragment{
 
 
 
     private View mView;
-    private Button mChangeParentButton;
+    private Button mChangeParentButton, mSaveButton;
     private Switch mSpecifyLocationSwitch;
-    private EditText mLatitudeEditText;
-    private EditText mLongitudeEditText;
+    private EditText mLatitudeEditText, mLongitudeEditText, mRadiusEditText;
     private ParentSettingsDialogListener mActionListener;
+    private SharedPreferences mSettings;
+    private SharedPreferences.Editor mEditor;
+
+
 
     public ParentSettingsDialogFragment() {
         // Required empty public constructor
     }
 
     public interface ParentSettingsDialogListener{
-        void onParentChangeButtonClicked(boolean bool);
+        void onParentChangeButtonClicked();
     }
 
     // TODO: Rename and change types and number of parameters
@@ -49,6 +55,15 @@ public class ParentSettingsDialogFragment extends DialogFragment{
     }
 
     @Override
+    public void onCreate(Bundle b){
+        super.onCreate(b);
+
+        mSettings = getContext().getSharedPreferences("MySettingsFile", MODE_PRIVATE);
+        mEditor = mSettings.edit();
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -58,7 +73,12 @@ public class ParentSettingsDialogFragment extends DialogFragment{
         mSpecifyLocationSwitch = (Switch) mView.findViewById(R.id.specify_location_switch);
         mLatitudeEditText = (EditText) mView.findViewById(R.id.latitude_editText);
         mLongitudeEditText = (EditText) mView.findViewById(R.id.longitude_editText);
+        mRadiusEditText = (EditText) mView.findViewById(R.id.radius_editText);
+        mSaveButton = (Button) mView.findViewById(R.id.save_button);
 
+        mRadiusEditText.setText(mSettings.getString(getString(R.string.radius),""));
+
+        setSpecifyLocationSwitchChecked();
         setListeners();
 
         return mView;
@@ -93,7 +113,7 @@ public class ParentSettingsDialogFragment extends DialogFragment{
         mChangeParentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActionListener.onParentChangeButtonClicked(true);
+                mActionListener.onParentChangeButtonClicked();
                 dismiss();
             }
         });
@@ -102,15 +122,61 @@ public class ParentSettingsDialogFragment extends DialogFragment{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    mLatitudeEditText.setVisibility(View.VISIBLE);
-                    mLongitudeEditText.setVisibility(View.VISIBLE);
+                    setEditTextVisible();
                 }
                 else{
-                    mLatitudeEditText.setVisibility(View.INVISIBLE);
-                    mLongitudeEditText.setVisibility(View.INVISIBLE);
+                    setEditTextGone();
                 }
             }
         });
+
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(mSpecifyLocationSwitch.isChecked()){
+                    mEditor.putInt(getString(R.string.specify_parent_location), 1);
+                    mEditor.putString(getString(R.string.specified_latitude),
+                            mLatitudeEditText.getText().toString());
+                    mEditor.putString(getString(R.string.specified_longitude),
+                            mLongitudeEditText.getText().toString());
+                }
+                else{
+                    mEditor.putInt(getString(R.string.specify_parent_location), 0);
+                }
+                mEditor.putString(getString(R.string.radius), mRadiusEditText.getText().toString());
+                mEditor.commit();
+                dismiss();
+            }
+        });
+    }
+
+    private void setSpecifyLocationSwitchChecked(){
+
+        if(mSettings.getInt(getString(R.string.specify_parent_location), 0) == 1){
+            mSpecifyLocationSwitch.setChecked(true);
+            mLatitudeEditText.setVisibility(View.VISIBLE);
+            mLongitudeEditText.setVisibility(View.VISIBLE);
+            mLatitudeEditText.setText(
+                    mSettings.getString(getString(R.string.specified_latitude), "0.0"));
+            mLongitudeEditText.setText(
+                    mSettings.getString(getString(R.string.specified_longitude), "0.0"));
+
+        }
+        else{
+
+        }
+
+    }
+
+    private void setEditTextGone(){
+        mLatitudeEditText.setVisibility(View.GONE);
+        mLongitudeEditText.setVisibility(View.GONE);
+    }
+
+    private void setEditTextVisible(){
+        mLatitudeEditText.setVisibility(View.VISIBLE);
+        mLongitudeEditText.setVisibility(View.VISIBLE);
     }
 
 }

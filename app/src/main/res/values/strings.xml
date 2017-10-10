@@ -14,4 +14,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="child_okay">Your child is fine.\nKeep Drinking.</string>
+    <string name="child_not_okay">Child is not in Zone</string>
 </resources>

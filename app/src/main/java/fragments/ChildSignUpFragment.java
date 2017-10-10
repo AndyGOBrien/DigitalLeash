@@ -22,6 +22,10 @@ import com.llamalabb.digitalleash.R;
 
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -99,6 +103,11 @@ public class ChildSignUpFragment extends Fragment {
                 try{
                     jsonObject.put("child_latitude", mLatitude.getText().toString());
                     jsonObject.put("child_longitude", mLongitude.getText().toString());
+
+                    mEditor.putString(getString(R.string.username),
+                            mParentUserName.getText().toString())
+                            .commit();
+
                 }catch(Exception e){e.printStackTrace();}
                 finally {
                     String string = jsonObject.toString();
@@ -115,8 +124,10 @@ public class ChildSignUpFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+
             try {
                 URL url = new URL(params[0]);
+
                 httpCon = (HttpURLConnection) url.openConnection();
                 httpCon.setRequestMethod("PATCH");
                 httpCon.setDoOutput(true);

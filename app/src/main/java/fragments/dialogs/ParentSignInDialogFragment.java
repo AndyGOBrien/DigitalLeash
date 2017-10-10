@@ -49,9 +49,14 @@ public class ParentSignInDialogFragment extends DialogFragment {
     private SharedPreferences.Editor mEditor;
     private MyLocationManager mMyLocationManager;
     private String mJsonString;
+    private ParentSignInDialogListener mActionListener;
 
     public ParentSignInDialogFragment() {
         // Required empty public constructor
+    }
+
+    public interface ParentSignInDialogListener{
+        void onParentSignInButtonClicked(String username);
     }
 
     // TODO: Rename and change types and number of parameters
@@ -106,6 +111,7 @@ public class ParentSignInDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mActionListener = (ParentSignInDialogListener) context;
     }
 
     @Override
@@ -117,7 +123,7 @@ public class ParentSignInDialogFragment extends DialogFragment {
         mSetInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String UrlStr = "https://turntotech.firebaseio.com/digitalleash/"+mUserName.getText().toString()+".json";
+                String urlStr = "https://turntotech.firebaseio.com/digitalleash/"+mUserName.getText().toString()+".json";
                 JSONObject jsonObj = new JSONObject();
                 try{
                     jsonObj.put("latitude", mLatitude.getText().toString());
@@ -126,7 +132,7 @@ public class ParentSignInDialogFragment extends DialogFragment {
                 }catch (JSONException e){e.printStackTrace();}
                 finally {
                     String json = jsonObj.toString();
-                    new GetSetData().execute(new String[] {UrlStr,json});
+                    new GetSetData().execute(new String[] {urlStr,json});
                 }
             }
         });
@@ -225,6 +231,7 @@ public class ParentSignInDialogFragment extends DialogFragment {
     private void setUserInformation(String username, String radius){
         mEditor.putString(getString(R.string.username), username);
         mEditor.putString(getString(R.string.radius), radius);
+        mActionListener.onParentSignInButtonClicked(username);
         mEditor.commit();
     }
 

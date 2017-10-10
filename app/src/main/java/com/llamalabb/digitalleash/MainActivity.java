@@ -47,13 +47,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mSettings = getSharedPreferences("MySettingsFile", MODE_PRIVATE);
         mEditor = mSettings.edit();
+
         if(mSettings.getInt(getString(R.string.is_parent), -1) == 1 && mSettings.getInt(getString(R.string.intro_complete), 0) == 1){
             Intent intent = new Intent(this, ParentActivity.class);
             startActivity(intent);
         }
+        else if(mSettings.getInt(getString(R.string.is_parent), -1) == 0 && mSettings.getInt(getString(R.string.intro_complete), 0) == 1){
+            Intent intent = new Intent(this, ChildActivity.class);
+            startActivity(intent);
+        }
+
         setContentView(R.layout.activity_main);
-
-
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 

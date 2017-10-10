@@ -1,23 +1,38 @@
 package com.llamalabb.digitalleash;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.media.Image;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
-import fragments.dialogs.ParentSettingsDialogFragment.ParentSettingsDialogListener;
+
+import Service.LocationIntentService;
 
 import fragments.dialogs.ParentSettingsDialogFragment;
 import fragments.dialogs.ParentSignInDialogFragment;
+import fragments.dialogs.ParentSignInDialogFragment.ParentSignInDialogListener;
+import fragments.dialogs.ParentSettingsDialogFragment.ParentSettingsDialogListener;
 
-public class ParentActivity extends AppCompatActivity implements ParentSettingsDialogListener {
+public class ParentActivity extends AppCompatActivity implements ParentSettingsDialogListener, ParentSignInDialogListener{
 
     private MyLocationManager mMyLocationManager;
-    private TextView mStatusText;
-    private boolean mOpenParentSignInFragment;
+    private TextView mStatusText,mUsernameText;
+    private SharedPreferences mSettings;
+    private SharedPreferences.Editor mEditor;
+    private Intent mLocationIntent;
+    private BroadcastReceiver broadcastReceiver;
+    private ImageView mParentImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +40,17 @@ public class ParentActivity extends AppCompatActivity implements ParentSettingsD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent);
 
+        mSettings = getSharedPreferences("MySettingsFile", MODE_PRIVATE);
+        mEditor = mSettings.edit();
+
         mMyLocationManager = MyLocationManager.getInstance(this);
         mStatusText = (TextView) findViewById(R.id.status_text);
+        mUsernameText = (TextView) findViewById(R.id.username_textView);
+        mUsernameText.setText("Username: " + mSettings.getString(getString(R.string.username), ""));
+        mParentImage = (ImageView) findViewById(R.id.parent_imageView);
+
+        startBackgroundLocationBroadcast();
+
     }
 
     @Override
@@ -60,9 +84,60 @@ public class ParentActivity extends AppCompatActivity implements ParentSettingsD
     }
 
     @Override
-    public void onParentChangeButtonClicked(boolean bool) {
-        mOpenParentSignInFragment = bool;
+    public void onParentChangeButtonClicked() {
         showParentSignInDialog();
+    }
+
+    @Override
+    public void onParentSignInButtonClicked(String username) {
+        mUsernameText.setText(username);
+    }
+
+
+    private void startBackgroundLocationBroadcast(){
+        mLocationIntent = new Intent(this, LocationIntentService.class);
+        mLocationIntent.putExtra(LocationIntentService.CHILD_OR_PARENT, "");
+
+        broadcastReceiver = new BroadcastReceiver(){
+            @Override
+			/*
+			 * This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+			 * During this time you can use the other methods on BroadcastReceiver to view/modify
+			 * the current result values.
+			 */
+            public void onReceive(Context arg0, Intent intent) {
+                if(intent.getBooleanExtra(LocationIntentService.IN_BOUND, true)){
+
+                    mStatusText.setText(getString(R.string.child_okay));
+                    getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(arg0, R.color.secondaryLightColor));
+                    mParentImage.setImageDrawable(ContextCompat.getDrawable(arg0, R.drawable.status_success2x));
+                }
+                else
+                {
+                    mStatusText.setText(getString(R.string.child_not_okay));
+                    getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(arg0, R.color.red));
+                    mParentImage.setImageDrawable(ContextCompat.getDrawable(arg0, R.drawable.status_fail2x));
+                }
+            }
+        };
+
+        startService(mLocationIntent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter filter = new IntentFilter(LocationIntentService.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        registerReceiver(broadcastReceiver,filter);
+    }
+
+    public void onPause()
+    {
+        unregisterReceiver(broadcastReceiver);
+        stopService(mLocationIntent);
+        super.onPause();
     }
 
 }

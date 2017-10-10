@@ -8,7 +8,9 @@
     <string name="is_previous_user">isPreviousUser</string>
     <string name="username">username</string>
     <string name="radius">radius</string>
-    <string name="specify_location">specifyLocation</string>
+    <string name="specify_parent_location">specifyParentLocation</string>
+    <string name="specified_longitude">specifiedLongitude</string>
+    <string name="specified_latitude">specifiedLatitude</string>
 
 
 
