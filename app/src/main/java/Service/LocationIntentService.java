@@ -53,6 +53,7 @@ public class LocationIntentService extends IntentService {
     private String mChildLatitude;
     private String mChildLongitude;
     private String mRadius;
+    private Boolean mIsParent;
 
 
     public LocationIntentService() {
@@ -63,6 +64,12 @@ public class LocationIntentService extends IntentService {
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         mSettings = getApplicationContext().getSharedPreferences("MySettingsFile", MODE_PRIVATE);
         mMyLocationManager = MyLocationManager.getInstance(this);
+        if(mSettings.getInt(getString(R.string.is_parent), 0) == 1){
+            mIsParent = true;
+        }
+        else
+            mIsParent = false;
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -131,7 +138,8 @@ public class LocationIntentService extends IntentService {
         try{
             jsonObj.put(latJsonKey, lat);
             jsonObj.put(lonJsonKey, lon);
-            jsonObj.put("radius", radius);
+            if(mIsParent)
+                jsonObj.put("radius", radius);
 
         }catch (JSONException e){e.printStackTrace();}
         finally {
