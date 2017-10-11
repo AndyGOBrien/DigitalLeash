@@ -29,7 +29,9 @@ import static com.llamalabb.digitalleash.CardValues.YES_NO_CARD;
 
 
 @RuntimePermissions
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ChildSignUpFragment.ChildSignInListener,
+        ParentSignInFragment.ParentSignInListener,
+        ParentSignUpFragment.ParentSignUpListener{
 
     private List<String> mMessages = new ArrayList<>();
     private FragmentManager mFragmentManager;
@@ -188,4 +190,24 @@ public class MainActivity extends AppCompatActivity {
         // NOTE: delegate the permission handling to generated method
         MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
+
+    @Override
+    public void parentSignUpSuccess() {
+        Intent intent = new Intent(this, ParentActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void parenSignInSuccess() {
+        Intent intent = new Intent(this, ParentActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void childSignUpSuccess() {
+        Intent intent = new Intent(this, ChildActivity.class);
+        startActivity(intent);
+    }
+
+
 }

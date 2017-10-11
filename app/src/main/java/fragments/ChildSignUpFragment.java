@@ -45,10 +45,15 @@ public class ChildSignUpFragment extends Fragment {
     private MyLocationManager mMyLocationManager;
     private TextView mTextView;
     private Button mSetParentButton;
+    private ChildSignInListener mActionListener;
 
 
     public ChildSignUpFragment() {
         // Required empty public constructor
+    }
+
+    public interface ChildSignInListener{
+        void childSignUpSuccess();
     }
 
     @Override
@@ -86,6 +91,7 @@ public class ChildSignUpFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mActionListener = (ChildSignInListener) context;
     }
 
     @Override
@@ -160,6 +166,7 @@ public class ChildSignUpFragment extends Fragment {
                 mTextView.setText("The parent has been set\n\n Please Continue...");
                 mEditor.putInt(getString(R.string.intro_complete), 1);
                 mEditor.commit();
+                mActionListener.childSignUpSuccess();
             }
             else{
                 Toast.makeText(getContext(), "ERROR: " + conStatus, Toast.LENGTH_SHORT).show();

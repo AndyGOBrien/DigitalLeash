@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +48,8 @@ public class ParentActivity extends AppCompatActivity implements ParentSettingsD
         mUsernameText.setText("Username: " + mSettings.getString(getString(R.string.username), ""));
         mParentImage = (ImageView) findViewById(R.id.parent_imageView);
 
+        showWaitingBackground();
+
         startBackgroundLocationBroadcast();
 
     }
@@ -71,6 +72,22 @@ public class ParentActivity extends AppCompatActivity implements ParentSettingsD
         }
     }
 
+    @Override
+    public void onParentChangeButtonClicked() {
+        showParentSignInDialog();
+    }
+
+    @Override
+    public void locationSettingChanged() {
+        showWaitingBackground();
+    }
+
+    @Override
+    public void onParentSignInButtonClicked(String username) {
+        mUsernameText.setText("Username: " + username);
+        showWaitingBackground();
+    }
+
     private void showSettingsDialog(){
         FragmentManager fm = getSupportFragmentManager();
         ParentSettingsDialogFragment settingsDialog = ParentSettingsDialogFragment.newInstance("Settings");
@@ -83,16 +100,29 @@ public class ParentActivity extends AppCompatActivity implements ParentSettingsD
         settingsDialog.show(fm, "fragment_alert");
     }
 
-    @Override
-    public void onParentChangeButtonClicked() {
-        showParentSignInDialog();
+    private void showWaitingBackground(){
+        mStatusText.setText(getString(R.string.wait));
+        getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.primaryLightColor));
+        mParentImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.if_hour_glass));
     }
 
-    @Override
-    public void onParentSignInButtonClicked(String username) {
-        mUsernameText.setText(username);
+    private void showParentSuccessBackground(){
+        mStatusText.setText(getString(R.string.child_okay));
+        getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.secondaryLightColor));
+        mParentImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.status_success2x));
     }
 
+    private void showChildNotInZoneBackground(){
+        mStatusText.setText(getString(R.string.child_not_okay));
+        getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.red));
+        mParentImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.status_fail2x));
+    }
+
+    private void showChildNotSetupBackground(){
+        mStatusText.setText(getString(R.string.child_not_set));
+        getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.yellow));
+        mParentImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.if_exclamation_point));
+    }
 
     private void startBackgroundLocationBroadcast(){
         mLocationIntent = new Intent(this, LocationIntentService.class);
@@ -106,17 +136,15 @@ public class ParentActivity extends AppCompatActivity implements ParentSettingsD
 			 * the current result values.
 			 */
             public void onReceive(Context arg0, Intent intent) {
-                if(intent.getBooleanExtra(LocationIntentService.IN_BOUND, true)){
-
-                    mStatusText.setText(getString(R.string.child_okay));
-                    getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(arg0, R.color.secondaryLightColor));
-                    mParentImage.setImageDrawable(ContextCompat.getDrawable(arg0, R.drawable.status_success2x));
+                if(intent.getBooleanExtra(LocationIntentService.CHILD_NOT_SET, true)){
+                    showChildNotSetupBackground();
+                }
+                else if(intent.getBooleanExtra(LocationIntentService.IN_BOUND, true)){
+                    showParentSuccessBackground();
                 }
                 else
                 {
-                    mStatusText.setText(getString(R.string.child_not_okay));
-                    getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(arg0, R.color.red));
-                    mParentImage.setImageDrawable(ContextCompat.getDrawable(arg0, R.drawable.status_fail2x));
+                    showChildNotInZoneBackground();
                 }
             }
         };

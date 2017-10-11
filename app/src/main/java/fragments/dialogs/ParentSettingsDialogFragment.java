@@ -34,6 +34,7 @@ public class ParentSettingsDialogFragment extends DialogFragment{
     private ParentSettingsDialogListener mActionListener;
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
+    private boolean locationSettingChanged;
 
 
 
@@ -43,6 +44,7 @@ public class ParentSettingsDialogFragment extends DialogFragment{
 
     public interface ParentSettingsDialogListener{
         void onParentChangeButtonClicked();
+        void locationSettingChanged();
     }
 
     // TODO: Rename and change types and number of parameters
@@ -60,6 +62,7 @@ public class ParentSettingsDialogFragment extends DialogFragment{
 
         mSettings = getContext().getSharedPreferences("MySettingsFile", MODE_PRIVATE);
         mEditor = mSettings.edit();
+        locationSettingChanged = false;
 
     }
 
@@ -133,19 +136,49 @@ public class ParentSettingsDialogFragment extends DialogFragment{
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String editedRadius = mRadiusEditText.getText().toString();
+                String editedLatitude = mLatitudeEditText.getText().toString();
+                String editedLongitude = mLongitudeEditText.getText().toString();
+                String cachedRadius = mSettings.getString(getString(R.string.radius),"");
+                String cachedLatitude = mSettings.getString(getString(R.string.specified_latitude), "");
+                String cachedLongitude = mSettings.getString(getString(R.string.specified_longitude), "");
+                int specifyParentLocation = mSettings.getInt(getString(R.string.specify_parent_location), 0);
+
 
                 if(mSpecifyLocationSwitch.isChecked()){
-                    mEditor.putInt(getString(R.string.specify_parent_location), 1);
-                    mEditor.putString(getString(R.string.specified_latitude),
-                            mLatitudeEditText.getText().toString());
-                    mEditor.putString(getString(R.string.specified_longitude),
-                            mLongitudeEditText.getText().toString());
+                    if(specifyParentLocation == 0){
+                        locationSettingChanged = true;
+                        mEditor.putInt(getString(R.string.specify_parent_location), 1);
+                        mEditor.commit();
+                    }
+                    if(!cachedLatitude.equals(editedLatitude) ||
+                            !cachedLongitude.equals(editedLongitude)){
+                        locationSettingChanged = true;
+                        mEditor.putString(getString(R.string.specified_latitude), editedLatitude);
+                        mEditor.putString(getString(R.string.specified_longitude), editedLongitude);
+                        mEditor.commit();
+                    }
                 }
                 else{
+                    if(specifyParentLocation == 1){
+                        locationSettingChanged = true;
+                    }
                     mEditor.putInt(getString(R.string.specify_parent_location), 0);
+                    mEditor.commit();
                 }
-                mEditor.putString(getString(R.string.radius), mRadiusEditText.getText().toString());
-                mEditor.commit();
+
+
+                if(!cachedRadius.equals(editedRadius)){
+                    mEditor.putString(getString(R.string.radius), editedRadius);
+                    mEditor.commit();
+                    locationSettingChanged = true;
+                }
+
+
+                if(locationSettingChanged)
+                    mActionListener.locationSettingChanged();
+
+
                 dismiss();
             }
         });

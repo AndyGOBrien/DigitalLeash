@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">DigitalLeash</string>
+    <string name="intro_title">Introduction</string>
+    <string name="parent_activity_title">Parent</string>
+    <string name="child_activity_title">Child</string>
+
+    <string name="app_name">Digital Leash</string>
     <string name="cardview_text">Card View Text</string>
 
     <string name="parent_sign_up">Please sign up for the Digital Leash Service</string>
@@ -16,4 +20,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="child_okay">Your child is fine.\nKeep Drinking.</string>
     <string name="child_not_okay">Child is not in Zone</string>
+    <string name="child_not_set">Child app has not been setup. \n\nPlease set up child app and confirm it is reporting location.</string>
+    <string name="wait">Please Wait...</string>
+    <string name="reporting">You are now reporting...</string>
 </resources>

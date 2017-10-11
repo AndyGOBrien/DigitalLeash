@@ -42,12 +42,17 @@ public class ParentSignUpFragment extends Fragment {
     private CardView mCardView;
     private TextView mTextView;
     private MyLocationManager mMyLocationManager;
+    private ParentSignUpListener mActionListener;
 
 
 
 
     public ParentSignUpFragment() {
         // Required empty public constructor
+    }
+
+    public interface ParentSignUpListener{
+        void parentSignUpSuccess();
     }
 
 
@@ -89,6 +94,7 @@ public class ParentSignUpFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mActionListener = (ParentSignUpListener) context;
 
     }
 
@@ -115,8 +121,8 @@ public class ParentSignUpFragment extends Fragment {
                         jsonObject.put("latitude", mLatitude.getText().toString());
                         jsonObject.put("longitude", mLongitude.getText().toString());
                         jsonObject.put("radius", mRadius.getText().toString());
-                        jsonObject.put("child_latitude", "0.0");
-                        jsonObject.put("child_longitude", "0.0");
+                        jsonObject.put("child_latitude", "Not Set");
+                        jsonObject.put("child_longitude", "Not Set");
                         mEditor.putString(getString(R.string.username), mUserName.getText().toString());
                         mEditor.putString(getString(R.string.radius), mRadius.getText().toString());
                         mEditor.commit();
@@ -201,6 +207,7 @@ public class ParentSignUpFragment extends Fragment {
                 mTextView.setText("Your account has been created...\n\n Please Continue...");
                 mEditor.putInt("introComplete", 1);
                 mEditor.commit();
+                mActionListener.parentSignUpSuccess();
             }
             else{
                 Toast.makeText(getContext(), "ERROR: " + conStatus, Toast.LENGTH_SHORT).show();

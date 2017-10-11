@@ -24,8 +24,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static java.lang.Double.parseDouble;
-import static java.lang.System.in;
-import static java.security.AccessController.getContext;
 
 
 /**
@@ -39,6 +37,7 @@ public class LocationIntentService extends IntentService {
 
     public static final String CHILD_OR_PARENT = "type";
     public static final String IN_BOUND = "InBound";
+    public static final String CHILD_NOT_SET = "ChildNotSet";
 
     private String mType;
 
@@ -85,12 +84,14 @@ public class LocationIntentService extends IntentService {
                 patchJSON(mSettings.getString(getString(R.string.specified_latitude), ""),
                         mSettings.getString(getString(R.string.specified_longitude), ""),
                         mSettings.getString(getString(R.string.radius),""));
+                mHttpCon.disconnect();
             }
             else{
                 openConnection();
                 patchJSON(mMyLocationManager.getLatitude() + "",
                         mMyLocationManager.getLongitude() + "",
                         mSettings.getString(getString(R.string.radius),""));
+                mHttpCon.disconnect();
             }
 
             processJsonInfo(getJSONString());
@@ -101,6 +102,14 @@ public class LocationIntentService extends IntentService {
 
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
 
+            if(mChildLatitude.equals("Not Set") || mChildLongitude.equals("Not Set")){
+                broadcastIntent.putExtra(CHILD_NOT_SET, true);
+                sendBroadcast(broadcastIntent);
+                break;
+            }
+            else
+                broadcastIntent.putExtra(CHILD_NOT_SET, false);
+
             if(isInRadius())
                 broadcastIntent.putExtra(IN_BOUND, true);
             else
@@ -109,7 +118,6 @@ public class LocationIntentService extends IntentService {
             sendBroadcast(broadcastIntent);
         }
 
-        //mHttpCon.disconnect();
     }
 
     private void openConnection(){
@@ -176,6 +184,9 @@ public class LocationIntentService extends IntentService {
                 result.append(line);
             }
         }catch(Exception e){e.printStackTrace();}
+        finally {
+            mHttpCon.disconnect();
+        }
         return result.toString();
     }
 

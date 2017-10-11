@@ -47,9 +47,14 @@ public class ParentSignInFragment extends Fragment {
     private MyLocationManager mMyLocationManager;
     private String mJsonString;
     private TextView mTextView;
+    private ParentSignInListener mActionListener;
     
     public ParentSignInFragment() {
         // Required empty public constructor
+    }
+
+    public interface ParentSignInListener{
+        void parenSignInSuccess();
     }
 
 
@@ -91,6 +96,7 @@ public class ParentSignInFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mActionListener = (ParentSignInListener) context;
     }
 
     @Override
@@ -123,13 +129,55 @@ public class ParentSignInFragment extends Fragment {
         HttpURLConnection httpCon;
         String conStatus;
 
+
         @Override
         protected String doInBackground(String... params) {
 
+            patchJSON(params[0], params[1]);
+
+            return getJSON(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            processJsonInfo(result);
+        }
+
+
+
+        private void patchJSON(String urlStr, String json){
+
+            try {
+                URL url = new URL(urlStr);
+                httpCon = (HttpURLConnection) url.openConnection();
+
+                httpCon.setRequestMethod("PATCH");
+                httpCon.setDoOutput(true);
+
+                httpCon.setRequestProperty("Content-Type", "application/json");
+                httpCon.setRequestProperty("Accept", "application/json");
+
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(httpCon.getOutputStream());
+                outputStreamWriter.write(json);
+                outputStreamWriter.flush();
+                outputStreamWriter.close();
+
+                conStatus = String.valueOf(httpCon.getResponseCode());
+                Log.e("ConnectionStatus", String.valueOf(httpCon.getResponseCode()));
+                Log.e("ConnectionStatus", String.valueOf(httpCon.getResponseMessage()));
+
+            }catch(Exception e){e.printStackTrace();}
+            finally{
+                httpCon.disconnect();
+            }
+
+        }
+
+        private String getJSON(String urlStr){
             StringBuilder result = new StringBuilder();
 
             try {
-                URL url = new URL(params[0]);
+                URL url = new URL(urlStr);
                 httpCon = (HttpURLConnection) url.openConnection();
                 InputStream in = new BufferedInputStream(httpCon.getInputStream());
 
@@ -140,19 +188,6 @@ public class ParentSignInFragment extends Fragment {
                     result.append(line);
                 }
 
-                httpCon = (HttpURLConnection) url.openConnection();
-
-                httpCon.setRequestMethod("PATCH");
-                httpCon.setDoOutput(true);
-
-                httpCon.setRequestProperty("Content-Type", "application/json");
-                httpCon.setRequestProperty("Accept", "application/json");
-
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(httpCon.getOutputStream());
-                outputStreamWriter.write(params[1]);
-                outputStreamWriter.flush();
-                outputStreamWriter.close();
-
                 conStatus = String.valueOf(httpCon.getResponseCode());
                 Log.e("ConnectionStatus", String.valueOf(httpCon.getResponseCode()));
                 Log.e("ConnectionStatus", String.valueOf(httpCon.getResponseMessage()));
@@ -161,15 +196,11 @@ public class ParentSignInFragment extends Fragment {
                 e.printStackTrace();
             }
             finally {
+
                 httpCon.disconnect();
+
             }
-
             return result.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            processJsonInfo(result);
         }
 
     }
@@ -193,6 +224,7 @@ public class ParentSignInFragment extends Fragment {
                     mTextView.setText("Your account has been verified\n\nPlease Continue...");
                     mEditor.putInt(getString(R.string.intro_complete), 1);
                     mEditor.commit();
+                    mActionListener.parenSignInSuccess();
                 }
 
             }catch(Exception e){e.printStackTrace();}

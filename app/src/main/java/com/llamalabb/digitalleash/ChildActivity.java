@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import Service.LocationIntentService;
@@ -16,7 +18,8 @@ public class ChildActivity extends AppCompatActivity {
 
 
     private MyLocationManager mMyLocationManager;
-    private TextView mCurrentParentText;
+    private TextView mCurrentParentText, mStatusText;
+    private ImageView mChildImage;
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
     private Intent mLocationIntent;
@@ -31,9 +34,13 @@ public class ChildActivity extends AppCompatActivity {
 
         mSettings = getSharedPreferences("MySettingsFile", MODE_PRIVATE);
         mEditor = mSettings.edit();
+        mStatusText = (TextView) findViewById(R.id.status_text);
+        mChildImage = (ImageView) findViewById(R.id.child_imageView);
         mCurrentParentText = (TextView) findViewById(R.id.current_parent_textView);
         mCurrentParentText.setText("Parent: " + mSettings.getString(getString(R.string.username), "null"));
         mMyLocationManager = MyLocationManager.getInstance(this);
+
+        showWaitingBackground();
 
         startBackgroundLocationBroadcast();
 
@@ -56,6 +63,18 @@ public class ChildActivity extends AppCompatActivity {
 //        }
 //    }
 
+    private void showWaitingBackground(){
+        mStatusText.setText(getString(R.string.wait));
+        getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.primaryLightColor));
+        mChildImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.if_hour_glass));
+    }
+
+    private void showChildSuccessBackground(){
+        mStatusText.setText(getString(R.string.reporting));
+        getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, R.color.green));
+        mChildImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.if_check_mark));
+    }
+
 
     private void startBackgroundLocationBroadcast(){
         mLocationIntent = new Intent(this, LocationIntentService.class);
@@ -69,7 +88,7 @@ public class ChildActivity extends AppCompatActivity {
 			 * the current result values.
 			 */
             public void onReceive(Context arg0, Intent intent) {
-
+                showChildSuccessBackground();
             }
         };
 
